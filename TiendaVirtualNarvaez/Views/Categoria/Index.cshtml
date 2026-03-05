@@ -1,0 +1,34 @@
+﻿@model List<TiendaVirtualNarvaez.Models.Categoria>
+
+<h2>Categorías</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Estado</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Nombre</td>
+                <td>@item.Descripcion</td>
+                <td>
+                    @if (!string.IsNullOrEmpty(item.Nombre))
+                    {
+                        <span class="text-success">Activo</span>
+                    }
+                    else
+                    {
+                        <span class="text-danger">Inactivo</span>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
