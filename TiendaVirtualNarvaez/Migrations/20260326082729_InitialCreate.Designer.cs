@@ -11,8 +11,8 @@ using TiendaVirtualNarvaez.Data;
 namespace TiendaVirtualNarvaez.Migrations
 {
     [DbContext(typeof(TiendaContext))]
-    [Migration("20260319204210_UpdateDatabase")]
-    partial class UpdateDatabase
+    [Migration("20260326082729_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

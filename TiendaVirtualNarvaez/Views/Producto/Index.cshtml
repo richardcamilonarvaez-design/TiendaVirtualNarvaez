@@ -1,6 +1,12 @@
 ﻿@model List<TiendaVirtualNarvaez.Models.Producto>
 
+@{
+    ViewData["Title"] = "Producto";
+}
+
 <h2>Lista de Productos</h2>
+
+<a class="btn btn-primary" href="/Producto/Create">Nuevo Producto</a>
 
 <table class="table">
     <thead>
@@ -9,26 +15,27 @@
             <th>Precio</th>
             <th>Stock</th>
             <th>Categoria</th>
-            <th>Estado</th>
+            <th>Acciones</th>
         </tr>
     </thead>
+
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var item in Model) //Model: Trae todos los producto ?evita errores
         {
             <tr>
                 <td>@item.Nombre</td>
                 <td>@item.Precio</td>
                 <td>@item.Stock</td>
-                *<th>@item.Categoria?.Nombre</th>*
+                <td>@item.Categoria?.Nombre</td>
+
                 <td>
-                    @if (item.TieneStock())
-                    {
-                        <span class="text-success">Disponible</span>
-                    }
-                    else
-                    {
-                        <span class="text-danger">Agotado</span>
-                    }
+                    <a class="btn btn-warning"
+                       href="/Producto/Edit/@item.Id">Editar</a>
+
+                    <a class="btn btn-danger"
+                       href="/Producto/Delete/@item.Id">Eliminar</a>
+
+
                 </td>
             </tr>
         }
