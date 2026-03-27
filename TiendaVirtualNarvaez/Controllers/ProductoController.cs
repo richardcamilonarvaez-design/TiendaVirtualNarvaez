@@ -2,8 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using TiendaVirtualNarvaez.Data;
 using TiendaVirtualNarvaez.Models;
-using TiendaVirtualNarvaez.Data;
-using TiendaVirtualNarvaez.Models;
+using Microsoft.AspNetCore.Mvc.Rendering; // Necesario para SelectList
 
 namespace TiendaVirtualNarvaez.Controllers
 {
@@ -20,45 +19,64 @@ namespace TiendaVirtualNarvaez.Controllers
         public IActionResult Index()
         {
             var productos = _context.Productos
-                .Include(p => p.Categoria) //Carga la relacion con la tabla categoria, no va traer los datos de la tabla categorias
-                .ToList(); //Ejecuta la consulta
+                .Include(p => p.Categoria)
+                .ToList();
 
             return View(productos);
         }
 
-        //FORMULARIO CREAR
-
+        // 2. FORMULARIO CREAR
         public IActionResult Create()
         {
+            // SelectList (Lista, ValorId, TextoAMostrar)
+            ViewBag.Categorias = ObtenerListaConIds(); 
             return View();
         }
 
-        //GUARDAR PRODUCTO   --Metodo Post 
+        //GUARDAR PRODUCTO
         [HttpPost]
-
         public IActionResult Create(Producto producto)
         {
-            _context.Productos.Add(producto); //Conexion con la base de datos
+            // Validar que la categoría exista
+            var existeCategoria = _context.Categorias
+                .Any(c => c.Id == producto.CategoriaId);
+
+            if (!existeCategoria)
+            {
+                ModelState.AddModelError("CategoriaId", "La categoría no existe");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Categorias = ObtenerListaConIds();
+                return View(producto);
+            }
+
+            _context.Productos.Add(producto);
             _context.SaveChanges();
 
             return RedirectToAction("Index");
         }
 
         //FORMULARIO EDITAR
-
-        public IActionResult Edit(int id) //Metodo get por defecto
+        public IActionResult Edit(int id)
         {
             var producto = _context.Productos.Find(id);
-            ViewBag.Categorias = _context.Categorias.ToList(); //Traer las tablas de categorias
+            ViewBag.Categorias = ObtenerListaConIds();
 
             return View(producto);
         }
 
         //ACTUALIZAR PRODUCTO
         [HttpPost]
-
         public IActionResult Edit(Producto producto)
         {
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Categorias = ObtenerListaConIds();
+                return View(producto);
+            }
+
             _context.Productos.Update(producto);
             _context.SaveChanges();
 
@@ -66,15 +84,29 @@ namespace TiendaVirtualNarvaez.Controllers
         }
 
         //ELIMINAR PRODUCTO
-
         public IActionResult Delete(int id)
         {
             var producto = _context.Productos.Find(id);
 
-            _context.Productos.Remove(producto);
-            _context.SaveChanges();
+            if (producto != null)
+            {
+                _context.Productos.Remove(producto);
+                _context.SaveChanges();
+            }
 
             return RedirectToAction("Index");
+        }
+
+        // EVITAR ERRORES DE CONVERSION
+        private SelectList ObtenerListaConIds()
+        {
+            var lista = _context.Categorias
+                .Select(c => new { 
+                    Id = c.Id, 
+                    Texto = c.Id + " - " + c.Nombre 
+                }).ToList();
+
+            return new SelectList(lista, "Id", "Texto");
         }
     }
 }

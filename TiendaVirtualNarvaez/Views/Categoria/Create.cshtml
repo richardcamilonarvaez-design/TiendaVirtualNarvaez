@@ -1,0 +1,26 @@
+﻿@model TiendaVirtualNarvaez.Models.Categoria
+
+<h2>Crear Categoría</h2>
+
+<form asp-action="Create" method="post">
+
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <div class="form-group">
+        <label>Nombre</label>
+        <input asp-for="Nombre" class="form-control" />
+        <span asp-validation-for="Nombre" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label>Descripción</label>
+        <input asp-for="Descripcion" class="form-control" />
+        <span asp-validation-for="Descripcion" class="text-danger"></span>
+    </div>
+
+<hr>
+
+<button type="submit" class="btn btn-success">Guardar</button>
+<a href="/Categoria" class="btn btn-secondary">Volver</a>
+
+</form>
