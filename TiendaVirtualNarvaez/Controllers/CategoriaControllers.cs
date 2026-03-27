@@ -1,19 +1,85 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using TiendaVirtualNarvaez.Data;
+using TiendaVirtualNarvaez.Models;
+using TiendaVirtualNarvaez.Data;
 using TiendaVirtualNarvaez.Models;
 
 namespace TiendaVirtualNarvaez.Controllers
 {
     public class CategoriaController : Controller
     {
+        private readonly TiendaContext _context; // Contexto de base de datos
+
+        // Inyección de dependencia para acceder a la base de datos
+        public CategoriaController(TiendaContext context)
+        {
+            _context = context;
+        }
+
+        // 1. LISTAR CATEGORIAS
         public IActionResult Index()
         {
-            var categoria = new List<Categoria>
+            // Trae todas las categorías de la base de datos
+            var categorias = _context.Categorias.ToList();
+            return View(categorias);
+        }
+
+        // 2. FORMULARIO CREAR (GET)
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        // 3. GUARDAR CATEGORIA (POST)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Create(Categoria categoria)
+        {
+            if (ModelState.IsValid)
             {
-                new Categoria { Nombre= "Tegnologia", Descripcion="Elementos Tecnologicos", Estado="Activo" },
-                new Categoria { Nombre= "Ropa", Descripcion="Prendas de Ropa", Estado="Activo"},
-                new Categoria { Nombre= "", Descripcion="", Estado="Inactivo"}
-            };
+                _context.Categorias.Add(categoria);
+                _context.SaveChanges();
+                return RedirectToAction(nameof(Index));
+            }
             return View(categoria);
+        }
+
+        // 4. FORMULARIO EDITAR (GET)
+        public IActionResult Edit(int id)
+        {
+            var categoria = _context.Categorias.Find(id);
+            if (categoria == null)
+            {
+                return NotFound();
+            }
+            return View(categoria);
+        }
+
+        // 5. ACTUALIZAR CATEGORIA (POST)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(Categoria categoria)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Categorias.Update(categoria);
+                _context.SaveChanges();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(categoria);
+        }
+
+        // 6. ELIMINAR CATEGORIA
+        public IActionResult Delete(int id)
+        {
+            var categoria = _context.Categorias.Find(id);
+            if (categoria != null)
+            {
+                _context.Categorias.Remove(categoria);
+                _context.SaveChanges();
+            }
+            return RedirectToAction(nameof(Index));
         }
     }
 }
