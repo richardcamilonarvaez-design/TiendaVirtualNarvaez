@@ -20,43 +20,58 @@ namespace TiendaVirtualNarvaez.Controllers
         public IActionResult Index()
         {
             var productos = _context.Productos
-                .Include(p => p.Categoria) //Carga la relacion con la tabla categoria, no va traer los datos de la tabla categorias
-                .ToList(); //Ejecuta la consulta
+                .Include(p => p.Categoria)
+                .ToList();
 
             return View(productos);
         }
 
-        //FORMULARIO CREAR
-
+        // 2. FORMULARIO CREAR
         public IActionResult Create()
         {
+            // SelectList (Lista, ValorId, TextoAMostrar)
+            ViewBag.Categorias = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(_context.Categorias, "Id", "Nombre");
+
             return View();
         }
 
-        //GUARDAR PRODUCTO   --Metodo Post 
+        //GUARDAR PRODUCTO
         [HttpPost]
-
         public IActionResult Create(Producto producto)
         {
-            _context.Productos.Add(producto); //Conexion con la base de datos
+            // Validar que la categoría exista
+            var existeCategoria = _context.Categorias
+                .Any(c => c.Id == producto.CategoriaId);
+
+            if (!existeCategoria)
+            {
+                ModelState.AddModelError("CategoriaId", "La categoría no existe");
+            }
+
+            // Validar modelo (precio, stock, etc.)
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Categorias = _context.Categorias.ToList();
+                return View(producto);
+            }
+
+            _context.Productos.Add(producto);
             _context.SaveChanges();
 
             return RedirectToAction("Index");
         }
 
         //FORMULARIO EDITAR
-
-        public IActionResult Edit(int id) //Metodo get por defecto
+        public IActionResult Edit(int id)
         {
             var producto = _context.Productos.Find(id);
-            ViewBag.Categorias = _context.Categorias.ToList(); //Traer las tablas de categorias
+            ViewBag.Categorias = _context.Categorias.ToList();
 
             return View(producto);
         }
 
         //ACTUALIZAR PRODUCTO
         [HttpPost]
-
         public IActionResult Edit(Producto producto)
         {
             _context.Productos.Update(producto);
@@ -66,7 +81,6 @@ namespace TiendaVirtualNarvaez.Controllers
         }
 
         //ELIMINAR PRODUCTO
-
         public IActionResult Delete(int id)
         {
             var producto = _context.Productos.Find(id);

@@ -1,52 +1,37 @@
-﻿@model IEnumerable<TiendaVirtualNarvaez.Models.Categoria>
+﻿@model List<TiendaVirtualNarvaez.Models.Categoria>
 
-<div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center">
-        <h2>Listado de Categorías</h2>
-        <a asp-action="Create" class="btn btn-primary">Nueva Categoría</a>
-    </div>
+@{
+    ViewData["Title"] = "Categoria";
+}
 
-    <hr />
+<h2>Lista de Categorías</h2>
 
-    <table class="table table-striped table-hover mt-3">
-        <thead class="table-dark">
+<a class="btn btn-primary" href="/Categoria/Create">Nueva Categoría</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model)
+        {
             <tr>
-                <th>Nombre</th>
-                <th>Descripción</th>
-                <th>Estado</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
+                <td>@item.Nombre</td>
+                <td>@item.Descripcion</td>
 
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>@item.Nombre</td>
-                    <td>@item.Descripcion</td>
-                    <td>
-                        @if (item.Estado == "Activo")
-                        {
-                            <span class="badge bg-success">Activo</span>
-                        }
-                        else
-                        {
-                            <span class="badge bg-danger">Inactivo</span>
-                        }
-                    </td>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">
-                            <i class="bi bi-pencil"></i> Editar
-                        </a>
-                        
-                        <a asp-action="Delete" asp-route-id="@item.Id"
-                               class="btn btn-danger btn-sm"
-                               onclick="return confirm('¿Estás seguro de eliminar esta categoría?')">
-                            <i class="bi bi-trash"></i> Eliminar
-                        </a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-</div>
+                <td>
+                    <a class="btn btn-warning"
+                       href="/Categoria/Edit/@item.Id">Editar</a>
+
+                    <a class="btn btn-danger"
+                       href="/Categoria/Delete/@item.Id">Eliminar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
