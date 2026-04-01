@@ -1,0 +1,41 @@
+﻿@model List<TiendaVirtualNarvaez.Models.Usuario>
+
+@{
+    ViewData["Title"] = "Usuario";
+}
+
+<h2>Lista de Usuarios</h2>
+
+<a class="btn btn-primary" href="/Usuario/Create">Nuevo Usuario</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Correo</th>
+            <th>Rol</th>
+            <th>Celular</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Nombre</td>
+                <td>@item.Correo</td>
+                <td>@item.Rol</td>
+                <td>@item.celular</td>
+
+                <td>
+                    <a class="btn btn-warning"
+                       href="/Usuario/Edit/@item.Id">Editar</a>
+
+                    <a class="btn btn-danger"
+                       href="/Usuario/Delete/@item.Id">Eliminar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
