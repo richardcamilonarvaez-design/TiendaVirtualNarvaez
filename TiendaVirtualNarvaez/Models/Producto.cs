@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System.ComponentModel.DataAnnotations;
 
 namespace TiendaVirtualNarvaez.Models
 {
@@ -6,28 +7,30 @@ namespace TiendaVirtualNarvaez.Models
     {
         public int Id { get; set; }
 
-        [Required]
-        [StringLength(100)]
+        [Required(ErrorMessage = "El nombre es obligatorio")]
+        [StringLength(100, ErrorMessage = "Máximo 100 caracteres")]
         public string Nombre { get; set; }
 
-        [Range(0, 1000000)]
+        [Range(0.01, 1000000, ErrorMessage = "El precio debe ser mayor a 0")]
         public double Precio { get; set; }
 
-        [Range(0, 100)]
+        [Range(0, 1000, ErrorMessage = "El stock no puede ser negativo")]
         public int Stock { get; set; }
 
+        [Range(1, int.MaxValue, ErrorMessage = "Debe seleccionar una categoría válida")]
         public int CategoriaId { get; set; }
+
+        [ValidateNever] 
         public Categoria Categoria { get; set; }
 
         public double CalcularValorInventario()
         {
             return Precio * Stock;
         }
+
         public bool TieneStock()
         {
-            if (Stock > 0) {return true;}
-            else { return false;}
+            return Stock > 0;
         }
     }
-
 }
