@@ -26,12 +26,19 @@ namespace TiendaVirtualNarvaez.Controllers
             return View(productos);
         }
 
+<<<<<<< HEAD
         // 2. FORMULARIO CREAR
         public IActionResult Create()
         {
             // SelectList (Lista, ValorId, TextoAMostrar)
             ViewBag.Categorias = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(_context.Categorias, "Id", "Nombre");
 
+=======
+        //FORMULARIO CREAR
+        public IActionResult Create()
+        {
+            ViewBag.Categorias = _context.Categorias.ToList(); //Select
+>>>>>>> eb6aa5aef1d4c1a475c61204ce7e404f9c460ba8
             return View();
         }
 

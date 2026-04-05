@@ -14,7 +14,11 @@ namespace TiendaVirtualNarvaez.Models
         [Range(0.01, 1000000, ErrorMessage = "El precio debe ser mayor a 0")]
         public double Precio { get; set; }
 
+<<<<<<< HEAD
         [Range(0, 1000, ErrorMessage = "El stock no puede ser un valor negativo")]
+=======
+        [Range(0, 1000, ErrorMessage = "El stock no puede ser negativo")]
+>>>>>>> eb6aa5aef1d4c1a475c61204ce7e404f9c460ba8
         public int Stock { get; set; }
 
         [Range(1, int.MaxValue, ErrorMessage = "Debe seleccionar una categoría válida")]
