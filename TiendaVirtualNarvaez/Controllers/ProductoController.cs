@@ -25,11 +25,26 @@ namespace TiendaVirtualNarvaez.Controllers
             return View(productos);
         }
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 0fd856ef78af15b144221a17dfa67ec19f637d14
         // 2. FORMULARIO CREAR
         public IActionResult Create()
         {
             // SelectList (Lista, ValorId, TextoAMostrar)
+<<<<<<< HEAD
             ViewBag.Categorias = ObtenerListaConIds(); 
+=======
+            ViewBag.Categorias = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(_context.Categorias, "Id", "Nombre");
+
+=======
+        //FORMULARIO CREAR
+        public IActionResult Create()
+        {
+            ViewBag.Categorias = _context.Categorias.ToList(); //Select
+>>>>>>> eb6aa5aef1d4c1a475c61204ce7e404f9c460ba8
+>>>>>>> 0fd856ef78af15b144221a17dfa67ec19f637d14
             return View();
         }
 
@@ -46,9 +61,16 @@ namespace TiendaVirtualNarvaez.Controllers
                 ModelState.AddModelError("CategoriaId", "La categoría no existe");
             }
 
+<<<<<<< HEAD
             if (!ModelState.IsValid)
             {
                 ViewBag.Categorias = ObtenerListaConIds();
+=======
+            // Validar modelo (precio, stock, etc.)
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Categorias = _context.Categorias.ToList();
+>>>>>>> 0fd856ef78af15b144221a17dfa67ec19f637d14
                 return View(producto);
             }
 
@@ -62,7 +84,11 @@ namespace TiendaVirtualNarvaez.Controllers
         public IActionResult Edit(int id)
         {
             var producto = _context.Productos.Find(id);
+<<<<<<< HEAD
             ViewBag.Categorias = ObtenerListaConIds();
+=======
+            ViewBag.Categorias = _context.Categorias.ToList();
+>>>>>>> 0fd856ef78af15b144221a17dfa67ec19f637d14
 
             return View(producto);
         }

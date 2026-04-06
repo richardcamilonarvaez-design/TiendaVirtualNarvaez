@@ -14,14 +14,26 @@ namespace TiendaVirtualNarvaez.Models
         [Range(0.01, 1000000, ErrorMessage = "El precio debe ser mayor a 0")]
         public double Precio { get; set; }
 
+<<<<<<< HEAD
         [Range(0, 1000, ErrorMessage = "El stock no puede ser negativo")]
 
+=======
+<<<<<<< HEAD
+        [Range(0, 1000, ErrorMessage = "El stock no puede ser un valor negativo")]
+=======
+        [Range(0, 1000, ErrorMessage = "El stock no puede ser negativo")]
+>>>>>>> eb6aa5aef1d4c1a475c61204ce7e404f9c460ba8
+>>>>>>> 0fd856ef78af15b144221a17dfa67ec19f637d14
         public int Stock { get; set; }
 
         [Range(1, int.MaxValue, ErrorMessage = "Debe seleccionar una categoría válida")]
         public int CategoriaId { get; set; }
 
+<<<<<<< HEAD
         [ValidateNever]
+=======
+        [ValidateNever] 
+>>>>>>> 0fd856ef78af15b144221a17dfa67ec19f637d14
         public Categoria Categoria { get; set; }
 
         public double CalcularValorInventario()
@@ -34,5 +46,9 @@ namespace TiendaVirtualNarvaez.Models
             return Stock > 0;
         }
     }
+<<<<<<< HEAD
 }
 
+=======
+}
+>>>>>>> 0fd856ef78af15b144221a17dfa67ec19f637d14
