@@ -11,7 +11,7 @@ using TiendaVirtualNarvaez.Data;
 namespace TiendaVirtualNarvaez.Migrations
 {
     [DbContext(typeof(TiendaContext))]
-    [Migration("20260326082729_InitialCreate")]
+    [Migration("20260406222558_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -34,15 +34,16 @@ namespace TiendaVirtualNarvaez.Migrations
 
                     b.Property<string>("Descripcion")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Estado")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Nombre")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 
@@ -86,6 +87,10 @@ namespace TiendaVirtualNarvaez.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Celular")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Correo")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -95,10 +100,6 @@ namespace TiendaVirtualNarvaez.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Rol")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("celular")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

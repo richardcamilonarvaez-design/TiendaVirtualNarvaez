@@ -2,20 +2,20 @@
 using Microsoft.EntityFrameworkCore;
 using TiendaVirtualNarvaez.Data;
 using TiendaVirtualNarvaez.Models;
-using Microsoft.AspNetCore.Mvc.Rendering; // Necesario para SelectList
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace TiendaVirtualNarvaez.Controllers
 {
     public class ProductoController : Controller
     {
-        private readonly TiendaContext _context; //context: conexion de los datos
+        private readonly TiendaContext _context;
 
-        public ProductoController(TiendaContext context) //Inyeccion de dependencia
+        public ProductoController(TiendaContext context)
         {
-            _context = context; //Accede a la tabla Productos
+            _context = context;
         }
 
-        //LISTAR PRODUCTOS
+        // LISTAR PRODUCTOS
         public IActionResult Index()
         {
             var productos = _context.Productos
@@ -25,34 +25,17 @@ namespace TiendaVirtualNarvaez.Controllers
             return View(productos);
         }
 
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> 0fd856ef78af15b144221a17dfa67ec19f637d14
-        // 2. FORMULARIO CREAR
+        // FORMULARIO CREAR
         public IActionResult Create()
         {
-            // SelectList (Lista, ValorId, TextoAMostrar)
-<<<<<<< HEAD
-            ViewBag.Categorias = ObtenerListaConIds(); 
-=======
-            ViewBag.Categorias = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(_context.Categorias, "Id", "Nombre");
-
-=======
-        //FORMULARIO CREAR
-        public IActionResult Create()
-        {
-            ViewBag.Categorias = _context.Categorias.ToList(); //Select
->>>>>>> eb6aa5aef1d4c1a475c61204ce7e404f9c460ba8
->>>>>>> 0fd856ef78af15b144221a17dfa67ec19f637d14
+            ViewBag.Categorias = ObtenerListaConIds();
             return View();
         }
 
-        //GUARDAR PRODUCTO
+        // GUARDAR PRODUCTO
         [HttpPost]
         public IActionResult Create(Producto producto)
         {
-            // Validar que la categoría exista
             var existeCategoria = _context.Categorias
                 .Any(c => c.Id == producto.CategoriaId);
 
@@ -61,16 +44,9 @@ namespace TiendaVirtualNarvaez.Controllers
                 ModelState.AddModelError("CategoriaId", "La categoría no existe");
             }
 
-<<<<<<< HEAD
             if (!ModelState.IsValid)
             {
                 ViewBag.Categorias = ObtenerListaConIds();
-=======
-            // Validar modelo (precio, stock, etc.)
-            if (!ModelState.IsValid)
-            {
-                ViewBag.Categorias = _context.Categorias.ToList();
->>>>>>> 0fd856ef78af15b144221a17dfa67ec19f637d14
                 return View(producto);
             }
 
@@ -80,20 +56,15 @@ namespace TiendaVirtualNarvaez.Controllers
             return RedirectToAction("Index");
         }
 
-        //FORMULARIO EDITAR
+        // FORMULARIO EDITAR
         public IActionResult Edit(int id)
         {
             var producto = _context.Productos.Find(id);
-<<<<<<< HEAD
             ViewBag.Categorias = ObtenerListaConIds();
-=======
-            ViewBag.Categorias = _context.Categorias.ToList();
->>>>>>> 0fd856ef78af15b144221a17dfa67ec19f637d14
-
             return View(producto);
         }
 
-        //ACTUALIZAR PRODUCTO
+        // ACTUALIZAR PRODUCTO
         [HttpPost]
         public IActionResult Edit(Producto producto)
         {
@@ -109,7 +80,7 @@ namespace TiendaVirtualNarvaez.Controllers
             return RedirectToAction("Index");
         }
 
-        //ELIMINAR PRODUCTO
+        // ELIMINAR PRODUCTO
         public IActionResult Delete(int id)
         {
             var producto = _context.Productos.Find(id);
@@ -123,13 +94,13 @@ namespace TiendaVirtualNarvaez.Controllers
             return RedirectToAction("Index");
         }
 
-        // EVITAR ERRORES DE CONVERSION
+        // LISTA PARA SELECT
         private SelectList ObtenerListaConIds()
         {
             var lista = _context.Categorias
-                .Select(c => new { 
-                    Id = c.Id, 
-                    Texto = c.Id + " - " + c.Nombre 
+                .Select(c => new {
+                    Id = c.Id,
+                    Texto = c.Id + " - " + c.Nombre
                 }).ToList();
 
             return new SelectList(lista, "Id", "Texto");
