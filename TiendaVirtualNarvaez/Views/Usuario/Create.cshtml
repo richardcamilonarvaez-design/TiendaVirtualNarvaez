@@ -1,39 +1,40 @@
 ﻿@model TiendaVirtualNarvaez.Models.Usuario
 
-<h2>Crear Usuario</h2>
+<div class="container mt-4">
 
-<form asp-action="Create" method="post">
+    <h2 class="mb-3">Crear Usuario</h2>
 
-    <div asp-validation-summary="All" class="text-danger"></div>
+    <form asp-action="Create" method="post">
 
-    <div class="form-group">
-        <label>Nombre</label>
-        <input asp-for="Nombre" class="form-control" />
-        <span asp-validation-for="Nombre" class="text-danger"></span>
-    </div>
+        <div asp-validation-summary="All" class="text-danger"></div>
 
-    <div class="form-group">
-        <label>Correo</label>
-        <input asp-for="Correo" class="form-control" />
-        <span asp-validation-for="Correo" class="text-danger"></span>
-    </div>
+        <div class="mb-3">
+            <label class="form-label">Nombre</label>
+            <input asp-for="Nombre" class="form-control" />
+            <span asp-validation-for="Nombre" class="text-danger"></span>
+        </div>
 
-    <div class="form-group">
-        <label>Rol</label>
-        <input asp-for="Rol" class="form-control" />
-    </div>
+        <div class="mb-3">
+            <label class="form-label">Correo</label>
+            <input asp-for="Correo" class="form-control" />
+            <span asp-validation-for="Correo" class="text-danger"></span>
+        </div>
 
-    <div class="form-group">
-        <label>Celular</label>
+        <div class="mb-3">
+            <label class="form-label">Rol</label>
+            <input asp-for="Rol" class="form-control" />
+        </div>
 
-        <input asp-for="Celular" class="form-control" />
-        <span asp-validation-for="Celular" class="text-danger"></span>
+        <div class="mb-3">
+            <label class="form-label">Celular</label>
+            <input asp-for="Celular" class="form-control" />
+            <span asp-validation-for="Celular" class="text-danger"></span>
+        </div>
 
-    </div>
+        <hr>
 
-    <hr>
+        <button type="submit" class="btn btn-success">Guardar</button>
+        <a href="/Usuario" class="btn btn-secondary">Volver</a>
 
-    <button type="submit" class="btn btn-success">Guardar</button>
-    <a href="/Usuario" class="btn btn-secondary">Volver</a>
-
-</form>
+    </form>
+</div>

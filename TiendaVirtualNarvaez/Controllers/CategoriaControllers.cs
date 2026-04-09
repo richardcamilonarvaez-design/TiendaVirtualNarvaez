@@ -38,12 +38,16 @@ namespace TiendaVirtualNarvaez.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Buscamos en la tabla de Productos si alguno pertenece a esta categoría
+                // Verificar si la categoría tiene productos asociados
                 bool tieneProductos = _context.Productos.Any(p => p.CategoriaId == categoria.Id);
 
                 if (!tieneProductos)
                 {
                     categoria.Estado = "Inactivo";
+                }
+                else
+                {
+                    categoria.Estado = "Activo"; // Cambiar estado a activo si ya tiene productos
                 }
 
                 _context.Categorias.Add(categoria);

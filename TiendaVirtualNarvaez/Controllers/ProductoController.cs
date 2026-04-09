@@ -28,7 +28,7 @@ namespace TiendaVirtualNarvaez.Controllers
         // FORMULARIO CREAR
         public IActionResult Create()
         {
-            ViewBag.Categorias = ObtenerListaConIds();
+            ViewBag.Categorias = _context.Categorias.ToList();
             return View();
         }
 
@@ -52,6 +52,15 @@ namespace TiendaVirtualNarvaez.Controllers
 
             _context.Productos.Add(producto);
             _context.SaveChanges();
+
+            var categoria = _context.Categorias.Find(producto.CategoriaId);
+
+            if (categoria != null)
+            {
+                categoria.Estado = "Activo";
+                _context.Categorias.Update(categoria);
+                _context.SaveChanges();
+            }
 
             return RedirectToAction("Index");
         }
@@ -77,6 +86,15 @@ namespace TiendaVirtualNarvaez.Controllers
             _context.Productos.Update(producto);
             _context.SaveChanges();
 
+            var categoriaNueva = _context.Categorias.Find(producto.CategoriaId);
+
+            if (categoriaNueva != null)
+            {
+                categoriaNueva.Estado = "Activo";
+                _context.Categorias.Update(categoriaNueva);
+                _context.SaveChanges();
+            }
+
             return RedirectToAction("Index");
         }
 
@@ -87,8 +105,22 @@ namespace TiendaVirtualNarvaez.Controllers
 
             if (producto != null)
             {
+                int categoriaId = producto.CategoriaId;
+
                 _context.Productos.Remove(producto);
                 _context.SaveChanges();
+
+                bool tieneProductos = _context.Productos
+                    .Any(p => p.CategoriaId == categoriaId);
+
+                var categoria = _context.Categorias.Find(categoriaId);
+
+                if (categoria != null)
+                {
+                    categoria.Estado = tieneProductos ? "Activo" : "Inactivo";
+                    _context.Categorias.Update(categoria);
+                    _context.SaveChanges();
+                }
             }
 
             return RedirectToAction("Index");

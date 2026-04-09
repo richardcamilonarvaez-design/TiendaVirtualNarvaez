@@ -4,35 +4,43 @@
     ViewData["Title"] = "Categoria";
 }
 
-<h2>Lista de Categorías</h2>
+<div class="container mt-4">
 
-<a class="btn btn-primary" href="/Categoria/Create">Nueva Categoría</a>
+    <h2 class="mb-3">Lista de Categorías</h2>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Nombre</th>
-            <th>Descripción</th>
-            <th>Estado</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
+    <a class="btn btn-success mb-3" href="/Categoria/Create">Nueva Categoría</a>
 
-    <tbody>
-        @foreach (var item in Model)
-        {
+    <table class="table table-striped table-bordered">
+        <thead class="table-dark">
             <tr>
-                <td>@item.Nombre</td>
-                <td>@item.Descripcion</td>
-                <td>@item.Estado</td>
-                <td>
-                    <a class="btn btn-warning"
-                       href="/Categoria/Edit/@item.Id">Editar</a>
-
-                    <a class="btn btn-danger"
-                       href="/Categoria/Delete/@item.Id">Eliminar</a>
-                </td>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Estado</th>
+                <th>Acciones</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Nombre</td>
+                    <td>@item.Descripcion</td>
+                    <td>
+                        <span class="badge @(item.Estado == "Activo" ? "bg-primary" : "bg-danger")">
+                            @item.Estado
+                        </span>
+                    </td>
+                    <td>
+                        <a class="btn btn-warning btn-sm"
+                           href="/Categoria/Edit/@item.Id">Editar</a>
+
+                        <a class="btn btn-danger btn-sm"
+                           href="/Categoria/Delete/@item.Id">Eliminar</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>

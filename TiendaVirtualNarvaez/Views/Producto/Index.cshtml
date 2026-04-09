@@ -4,41 +4,40 @@
     ViewData["Title"] = "Producto";
 }
 
-<h2>Lista de Productos</h2>
+<div class="container mt-4">
+    <h2 class="mb-3">Lista de Productos</h2>
 
-<a class="btn btn-primary" href="/Producto/Create">Nuevo Producto</a>
+    <a class="btn btn-success mb-3" href="/Producto/Create">Nuevo Producto</a>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Nombre</th>
-            <th>Precio</th>
-            <th>Stock</th>
-            <th>Categoria</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-
-    <tbody>
-        @foreach (var item in Model) //Model: Trae todos los producto ?evita errores
-        {
+    <table class="table table-striped table-bordered">
+        <thead class="table-dark">
             <tr>
-                <td>@item.Nombre</td>
-                <td>@item.Precio</td>
-                <td>@item.Stock</td>
-                <td>@item.Categoria?.Nombre</td>
-
-                <td>
-                    <a class="btn btn-warning"
-                       href="/Producto/Edit/@item.Id">Editar</a>
-
-                    <a class="btn btn-danger"
-                       href="/Producto/Delete/@item.Id">Eliminar</a>
-
-
-                </td>
+                <th>Nombre</th>
+                <th>Precio</th>
+                <th>Stock</th>
+                <th>Categoria</th>
+                <th>Acciones</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
 
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Nombre</td>
+                    <td>@item.Precio</td>
+                    <td>@item.Stock</td>
+                    <td>@item.Categoria?.Nombre</td>
+
+                    <td>
+                        <a class="btn btn-warning btn-sm"
+                           href="/Producto/Edit/@item.Id">Editar</a>
+
+                        <a class="btn btn-danger btn-sm"
+                           href="/Producto/Delete/@item.Id">Eliminar</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

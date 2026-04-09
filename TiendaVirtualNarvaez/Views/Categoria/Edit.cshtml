@@ -2,27 +2,27 @@
 
 <div class="container mt-4">
 
-    <h2>Editar Categoría</h2>
+    <h2 class="mb-3">Editar Categoría</h2>
 
     <form asp-action="Edit" method="post">
 
         <input type="hidden" asp-for="Id" />
 
         <div class="mb-3">
-            <label>Nombre</label>
+            <label class="form-label">Nombre</label>
             <input asp-for="Nombre" class="form-control" />
         </div>
 
         <div class="mb-3">
-            <label>Descripción</label>
+            <label class="form-label">Descripción</label>
             <input asp-for="Descripcion" class="form-control" />
         </div>
 
         <div class="mb-3">
-            <label>Estado</label>
+            <label class="form-label">Estado</label>
             <select asp-for="Estado" class="form-control">
-                <option value="Activo">Activo</option>
-                <option value="Inactivo">Inactivo</option>
+                <option value="Activo" selected="@(Model.Estado == "Activo" ? "selected" : null)">Activo</option>
+                <option value="Inactivo" selected="@(Model.Estado == "Inactivo" ? "selected" : null)">Inactivo</option>
             </select>
         </div>
 

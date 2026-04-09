@@ -13,21 +13,22 @@ namespace TiendaVirtualNarvaez.Controllers
             _context = context;
         }
 
-        //LISTAR USUARIOS
+        // LISTAR USUARIOS
         public IActionResult Index()
         {
             var usuarios = _context.Usuarios.ToList();
             return View(usuarios);
         }
 
-        //FORMULARIO CREAR
+        // FORMULARIO CREAR
         public IActionResult Create()
         {
             return View();
         }
 
-        //GUARDAR USUARIO
+        // GUARDAR USUARIO
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Create(Usuario usuario)
         {
             if (!ModelState.IsValid)
@@ -41,15 +42,22 @@ namespace TiendaVirtualNarvaez.Controllers
             return RedirectToAction("Index");
         }
 
-        //FORMULARIO EDITAR
+        // FORMULARIO EDITAR
         public IActionResult Edit(int id)
         {
             var usuario = _context.Usuarios.Find(id);
+
+            if (usuario == null)
+            {
+                return NotFound();
+            }
+
             return View(usuario);
         }
 
-        //ACTUALIZAR USUARIO
+        // ACTUALIZAR USUARIO
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Edit(Usuario usuario)
         {
             if (!ModelState.IsValid)
@@ -63,10 +71,15 @@ namespace TiendaVirtualNarvaez.Controllers
             return RedirectToAction("Index");
         }
 
-        //ELIMINAR USUARIO
+        // ELIMINAR USUARIO
         public IActionResult Delete(int id)
         {
             var usuario = _context.Usuarios.Find(id);
+
+            if (usuario == null)
+            {
+                return NotFound();
+            }
 
             _context.Usuarios.Remove(usuario);
             _context.SaveChanges();
