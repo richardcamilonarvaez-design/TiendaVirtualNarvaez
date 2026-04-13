@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using TiendaVirtualNarvaez.Data;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddSession();
 
 // Configurar el DbContext en los servicios
 builder.Services.AddDbContext<TiendaContext>(options =>
@@ -18,6 +19,8 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
+
+app.UseSession();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

@@ -23,5 +23,8 @@ namespace TiendaVirtualNarvaez.Models
         [RegularExpression(@"^3\d{9}$",
             ErrorMessage = "El celular debe estar entre 3000000000 y 3999999999")]
         public string Celular { get; set; }
+
+        [Required(ErrorMessage = "La clave es obligatoria")]
+        public string Clave { get; set; }
     }
 }

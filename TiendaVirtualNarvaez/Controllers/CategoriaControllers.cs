@@ -20,6 +20,11 @@ namespace TiendaVirtualNarvaez.Controllers
         // 1. LISTAR CATEGORIAS
         public IActionResult Index()
         {
+            if (HttpContext.Session.GetString("Usuario") == null)
+            {
+                return RedirectToAction("Index", "Login");
+            }
+
             // Trae todas las categorías de la base de datos
             var categorias = _context.Categorias.ToList();
             return View(categorias);

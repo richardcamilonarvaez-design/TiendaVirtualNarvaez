@@ -17,7 +17,12 @@ namespace TiendaVirtualNarvaez.Controllers
 
         // LISTAR PRODUCTOS
         public IActionResult Index()
-        {
+        {   
+            if(HttpContext.Session.GetString("Usuario") == null)
+            {
+                return RedirectToAction("Index", "Login");
+            }
+
             var productos = _context.Productos
                 .Include(p => p.Categoria)
                 .ToList();
@@ -28,7 +33,7 @@ namespace TiendaVirtualNarvaez.Controllers
         // FORMULARIO CREAR
         public IActionResult Create()
         {
-            ViewBag.Categorias = _context.Categorias.ToList();
+            ViewBag.Categorias = ObtenerListaConIds(); // 🔥 CORREGIDO
             return View();
         }
 
@@ -46,7 +51,7 @@ namespace TiendaVirtualNarvaez.Controllers
 
             if (!ModelState.IsValid)
             {
-                ViewBag.Categorias = ObtenerListaConIds();
+                ViewBag.Categorias = ObtenerListaConIds(); // 🔥 IMPORTANTE
                 return View(producto);
             }
 
@@ -126,7 +131,7 @@ namespace TiendaVirtualNarvaez.Controllers
             return RedirectToAction("Index");
         }
 
-        // LISTA PARA SELECT
+        // LISTA PARA SELECT (YA ESTABA BIEN)
         private SelectList ObtenerListaConIds()
         {
             var lista = _context.Categorias
