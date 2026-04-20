@@ -30,6 +30,22 @@ namespace TiendaVirtualNarvaez.Controllers
             return View(productos);
         }
 
+        // DETALLES DEL PRODUCTO
+        public IActionResult Details(int id)
+        {
+            // Buscamos el producto e incluimos su categoría
+            var producto = _context.Productos
+                .Include(p => p.Categoria)
+                .FirstOrDefault(p => p.Id == id);
+
+            if (producto == null)
+            {
+                return NotFound();
+            }
+
+            return View(producto);
+        }
+
         // FORMULARIO CREAR
         public IActionResult Create()
         {

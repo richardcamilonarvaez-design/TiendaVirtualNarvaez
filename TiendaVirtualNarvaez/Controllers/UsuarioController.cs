@@ -25,6 +25,19 @@ namespace TiendaVirtualNarvaez.Controllers
             return View(usuarios);
         }
 
+        // DETALLES DEL USUARIO
+        public IActionResult Details(int id)
+        {
+            var usuario = _context.Usuarios.Find(id);
+
+            if (usuario == null)
+            {
+                return NotFound();
+            }
+
+            return View(usuario);
+        }
+
         // FORMULARIO CREAR
         public IActionResult Create()
         {

@@ -1,0 +1,36 @@
+﻿@model TiendaVirtualNarvaez.Models.Categoria
+
+@{
+    ViewData["Title"] = "Detalles de Categoría";
+}
+
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header bg-info text-white">
+            <h2 class="mb-0">Detalles de la Categoría</h2>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">ID</dt>
+                <dd class="col-sm-9">@Model.Id</dd>
+
+                <dt class="col-sm-3">Nombre</dt>
+                <dd class="col-sm-9">@Model.Nombre</dd>
+
+                <dt class="col-sm-3">Descripción</dt>
+                <dd class="col-sm-9">@Model.Descripcion</dd>
+
+                <dt class="col-sm-3">Estado</dt>
+                <dd class="col-sm-9">
+                    <span class="badge @(Model.Estado == "Activo" ? "bg-primary" : "bg-danger")">
+                        @Model.Estado
+                    </span>
+                </dd>
+            </dl>
+        </div>
+        <div class="card-footer">
+            <a href="/Categoria/Edit/@Model.Id" class="btn btn-warning">Editar</a>
+            <a href="/Categoria" class="btn btn-secondary">Volver a la lista</a>
+        </div>
+    </div>
+</div>

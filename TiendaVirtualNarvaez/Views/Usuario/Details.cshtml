@@ -1,0 +1,30 @@
+﻿@model TiendaVirtualNarvaez.Models.Usuario
+
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h3 class="mb-0">Perfil de @Model.Nombre</h3>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-4">Nombre Completo</dt>
+                <dd class="col-sm-8">@Model.Nombre</dd>
+
+                <dt class="col-sm-4">Correo Electrónico</dt>
+                <dd class="col-sm-8">@Model.Correo</dd>
+
+                <dt class="col-sm-4">Celular</dt>
+                <dd class="col-sm-8">@Model.Celular</dd>
+
+                <dt class="col-sm-4">Rol en el sistema</dt>
+                <dd class="col-sm-8">
+                    <span class="badge bg-info text-dark">@Model.Rol</span>
+                </dd>
+            </dl>
+        </div>
+        <div class="card-footer">
+            <a href="/Usuario/Edit/@Model.Id" class="btn btn-warning">Editar</a>
+            <a href="/Usuario" class="btn btn-secondary">Volver</a>
+        </div>
+    </div>
+</div>

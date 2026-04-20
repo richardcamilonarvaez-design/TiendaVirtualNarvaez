@@ -1,0 +1,39 @@
+﻿@model TiendaVirtualNarvaez.Models.Producto
+
+@{
+    ViewData["Title"] = "Detalles del Producto";
+}
+
+<div class="container mt-4">
+    <div class="card shadow">
+        <div class="card-header bg-dark text-white">
+            <h2 class="mb-0">Información del Producto</h2>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">Código/ID</dt>
+                <dd class="col-sm-9">@Model.Id</dd>
+
+                <dt class="col-sm-3">Nombre</dt>
+                <dd class="col-sm-9">@Model.Nombre</dd>
+
+                <dt class="col-sm-3">Precio</dt>
+                <dd class="col-sm-9 text-success fw-bold">
+                    @Model.Precio.ToString("C0")
+                </dd>
+
+                <dt class="col-sm-3">Categoría</dt>
+                <dd class="col-sm-9">
+                    @(Model.Categoria != null ? Model.Categoria.Nombre : "Sin Categoría")
+                </dd>
+
+                <dt class="col-sm-3">Stock/Cantidad</dt>
+                <dd class="col-sm-9">@Model.Stock unidades</dd>
+            </dl>
+        </div>
+        <div class="card-footer">
+            <a href="/Producto/Edit/@Model.Id" class="btn btn-warning">Editar</a>
+            <a href="/Producto" class="btn btn-secondary">Volver a la lista</a>
+        </div>
+    </div>
+</div>

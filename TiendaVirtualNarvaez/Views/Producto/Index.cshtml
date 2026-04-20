@@ -25,11 +25,14 @@
             {
                 <tr>
                     <td>@item.Nombre</td>
-                    <td>@item.Precio</td>
+                    <td>@item.Precio.ToString("C0")</td>
                     <td>@item.Stock</td>
                     <td>@item.Categoria?.Nombre</td>
 
                     <td>
+                        <a class="btn btn-info btn-sm text-white"
+                           href="/Producto/Details/@item.Id">Ver</a>
+
                         <a class="btn btn-warning btn-sm"
                            href="/Producto/Edit/@item.Id">Editar</a>
 

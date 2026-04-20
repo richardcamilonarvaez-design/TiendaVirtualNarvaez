@@ -30,6 +30,17 @@ namespace TiendaVirtualNarvaez.Controllers
             return View(categorias);
         }
 
+        // DETALLES DE LA CATEGORIA
+        public IActionResult Details(int id)
+        {
+            var categoria = _context.Categorias.Find(id);
+            if (categoria == null)
+            {
+                return NotFound();
+            }
+            return View(categoria);
+        }
+
         // 2. FORMULARIO CREAR (GET)
         public IActionResult Create()
         {
