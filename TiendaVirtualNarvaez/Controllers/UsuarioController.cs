@@ -13,6 +13,15 @@ namespace TiendaVirtualNarvaez.Controllers
             _context = context;
         }
 
+        public override void OnActionExecuting(Microsoft.AspNetCore.Mvc.Filters.ActionExecutingContext context)
+        {
+            if (context.HttpContext.Session.GetString("Usuario") == null)
+            {
+                context.Result = new RedirectToActionResult("Index", "Login", null);
+            }
+            base.OnActionExecuting(context);
+        }
+
         // LISTAR USUARIOS
         public IActionResult Index()
         {
