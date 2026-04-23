@@ -21,12 +21,14 @@ namespace TiendaVirtualJojoa.Controllers
         {
             var usuario = _context.Usuarios
                 .FirstOrDefault(u => u.Correo == correo && u.Clave == clave);
+
             if (usuario != null)
             {
                 HttpContext.Session.SetString("Usuario", usuario.Nombre);
+                HttpContext.Session.SetString("Rol", usuario.Rol);
                 HttpContext.Session.SetString("Contraseña", usuario.Clave);
 
-                return RedirectToAction("Index", "Categoria");
+                return RedirectToAction("Index", "Home");
             }
             ViewBag.Error = "Credenciales incorrectas";
             return View();

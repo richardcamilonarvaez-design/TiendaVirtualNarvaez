@@ -131,28 +131,28 @@ namespace TiendaVirtualNarvaez.Controllers
         // ELIMINAR PRODUCTO
         public IActionResult Delete(int id)
         {
-            var producto = _context.Productos.Find(id);
-
-            if (producto != null)
+            var rol = HttpContext.Session.GetString("Rol");
+            if (rol != "administrador")
             {
-                int categoriaId = producto.CategoriaId;
-
-                _context.Productos.Remove(producto);
-                _context.SaveChanges();
-
-                bool tieneProductos = _context.Productos
-                    .Any(p => p.CategoriaId == categoriaId);
-
-                var categoria = _context.Categorias.Find(categoriaId);
-
-                if (categoria != null)
-                {
-                    categoria.Estado = tieneProductos ? "Activo" : "Inactivo";
-                    _context.Categorias.Update(categoria);
-                    _context.SaveChanges();
-                }
+                return RedirectToAction("Index", "Login");
             }
 
+            var producto = _context.Productos.Find(id);
+            if (producto == null) return RedirectToAction("Index");
+
+            int categoriaId = producto.CategoriaId;
+
+            _context.Productos.Remove(producto);
+
+            var categoria = _context.Categorias.Find(categoriaId);
+            if (categoria != null)
+            {
+                bool tieneProductos = _context.Productos.Any(p => p.CategoriaId == categoriaId && p.Id != id);
+                categoria.Estado = tieneProductos ? "Activo" : "Inactivo";
+                _context.Categorias.Update(categoria);
+            }
+
+            _context.SaveChanges();
             return RedirectToAction("Index");
         }
 

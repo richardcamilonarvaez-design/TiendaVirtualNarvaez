@@ -110,6 +110,11 @@ namespace TiendaVirtualNarvaez.Controllers
         // 6. ELIMINAR CATEGORIA
         public IActionResult Delete(int id)
         {
+            var rol = HttpContext.Session.GetString("Rol");
+            if (rol != "administrador")
+            {
+                return RedirectToAction("Index", "Login");
+            }
             var categoria = _context.Categorias.Find(id);
             if (categoria != null)
             {

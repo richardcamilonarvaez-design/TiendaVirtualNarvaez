@@ -16,7 +16,10 @@
                 <th>Nombre</th>
                 <th>Descripción</th>
                 <th>Estado</th>
-                <th>Acciones</th>
+                @if (Context.Session.GetString("Rol") == "administrador")
+                {
+                    <th>Acciones</th>
+                }
             </tr>
         </thead>
 
@@ -24,6 +27,7 @@
             @foreach (var item in Model)
             {
                 <tr>
+    
                     <td>@item.Nombre</td>
                     <td>@item.Descripcion</td>
                     <td>
@@ -31,6 +35,7 @@
                             @item.Estado
                         </span>
                     </td>
+                    @if (Context.Session.GetString("Rol") == "administrador"){
                     <td>
                         <a class="btn btn-info btn-sm text-white"
                            href="/Categoria/Details/@item.Id">Ver</a>
@@ -41,9 +46,9 @@
                         <a class="btn btn-danger btn-sm"
                            href="/Categoria/Delete/@item.Id">Eliminar</a>
                     </td>
+                    }
                 </tr>
             }
         </tbody>
-    </table>
-
+    </table>    
 </div>

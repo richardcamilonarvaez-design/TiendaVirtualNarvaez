@@ -16,7 +16,10 @@
                 <th>Precio</th>
                 <th>Stock</th>
                 <th>Categoria</th>
-                <th>Acciones</th>
+                @if (Context.Session.GetString("Rol") == "administrador")
+                {
+                    <th>Acciones</th>
+                }
             </tr>
         </thead>
 
@@ -29,16 +32,25 @@
                     <td>@item.Stock</td>
                     <td>@item.Categoria?.Nombre</td>
 
-                    <td>
-                        <a class="btn btn-info btn-sm text-white"
-                           href="/Producto/Details/@item.Id">Ver</a>
+                    @if (Context.Session.GetString("Rol") == "administrador")
+                    {
 
-                        <a class="btn btn-warning btn-sm"
-                           href="/Producto/Edit/@item.Id">Editar</a>
+                        <td>
 
-                        <a class="btn btn-danger btn-sm"
-                           href="/Producto/Delete/@item.Id">Eliminar</a>
-                    </td>
+                            <a class="btn btn-info btn-sm text-white"
+                            href="/Producto/Details/@item.Id">Ver</a>
+
+
+                            <a class="btn btn-warning btn-sm"
+                            href="/Producto/Edit/@item.Id">Editar</a>
+
+
+
+                            <a class="btn btn-danger btn-sm"
+                            href="/Producto/Delete/@item.Id">Eliminar</a>
+
+                        </td>
+                    }
                 </tr>
             }
         </tbody>
