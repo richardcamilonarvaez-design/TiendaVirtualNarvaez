@@ -24,9 +24,11 @@ namespace TiendaVirtualJojoa.Controllers
 
             if (usuario != null)
             {
-                HttpContext.Session.SetString("Usuario", usuario.Nombre);
+                // CAMBIO CRÍTICO: Guarda el Correo, no el Nombre, en la sesión "Usuario"
+                HttpContext.Session.SetString("Usuario", usuario.Correo);
+
+                HttpContext.Session.SetString("NombreUsuario", usuario.Nombre); // Opcional: para mostrar el nombre en el Layout
                 HttpContext.Session.SetString("Rol", usuario.Rol);
-                HttpContext.Session.SetString("Contraseña", usuario.Clave);
 
                 return RedirectToAction("Index", "Home");
             }

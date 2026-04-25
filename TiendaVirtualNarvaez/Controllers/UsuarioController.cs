@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TiendaVirtualNarvaez.Data;
 using TiendaVirtualNarvaez.Models;
+using Microsoft.EntityFrameworkCore; // Añadido para ToListAsync
 
 namespace TiendaVirtualNarvaez.Controllers
 {
@@ -22,94 +23,111 @@ namespace TiendaVirtualNarvaez.Controllers
             base.OnActionExecuting(context);
         }
 
-        // LISTAR USUARIOS
+        // LISTAR USUARIOS (CON FILTRO DE ROL)
         public IActionResult Index()
         {
-            if (HttpContext.Session.GetString("Usuario") == null)
+            // 1. Obtener datos de la sesión
+            string correoSesion = HttpContext.Session.GetString("Usuario");
+            string rolSesion = HttpContext.Session.GetString("Rol");
+
+            // Seguridad básica: si no hay sesión, al login
+            if (string.IsNullOrEmpty(correoSesion))
             {
                 return RedirectToAction("Index", "Login");
             }
 
-            var usuarios = _context.Usuarios.ToList();
-            return View(usuarios);
+            if (rolSesion == "administrador")
+            {
+                var usuarios = _context.Usuarios.ToList();
+                return View(usuarios);
+            }
+            else
+            {
+                // CORRECCIÓN: Filtramos asegurando que no afecten espacios o mayúsculas
+                var usuarios = _context.Usuarios
+                    .Where(u => u.Correo.ToLower().Trim() == correoSesion.ToLower().Trim())
+                    .ToList();
+
+                return View(usuarios);
+            }
         }
 
-        // DETALLES DEL USUARIO
+        // DETALLES DEL USUARIO (CON PROTECCIÓN)
         public IActionResult Details(int id)
         {
             var usuario = _context.Usuarios.Find(id);
+            string correoSesion = HttpContext.Session.GetString("Usuario");
+            string rolSesion = HttpContext.Session.GetString("Rol");
 
-            if (usuario == null)
+            if (usuario == null) return NotFound();
+
+            // Bloqueo: Si no es admin y el detalle no es el suyo
+            if (rolSesion != "administrador" && usuario.Correo != correoSesion)
             {
-                return NotFound();
+                return RedirectToAction("Index");
             }
 
             return View(usuario);
         }
 
-        // FORMULARIO CREAR
-        public IActionResult Create()
-        {
-            return View();
-        }
+        public IActionResult Create() => View();
 
-        // GUARDAR USUARIO
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(Usuario usuario)
         {
-            if (!ModelState.IsValid)
-            {
-                return View(usuario);
-            }
-
+            if (!ModelState.IsValid) return View(usuario);
             _context.Usuarios.Add(usuario);
             _context.SaveChanges();
-
             return RedirectToAction("Index");
         }
 
-        // FORMULARIO EDITAR
+        // FORMULARIO EDITAR (CON PROTECCIÓN)
         public IActionResult Edit(int id)
         {
             var usuario = _context.Usuarios.Find(id);
+            string correoSesion = HttpContext.Session.GetString("Usuario");
+            string rolSesion = HttpContext.Session.GetString("Rol");
 
-            if (usuario == null)
+            if (usuario == null) return NotFound();
+
+            // Seguridad: Un usuario normal no puede editar a otros aunque sepa el ID
+            if (rolSesion != "administrador" && usuario.Correo != correoSesion)
             {
-                return NotFound();
+                return RedirectToAction("Index");
             }
 
             return View(usuario);
         }
 
-        // ACTUALIZAR USUARIO
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Edit(Usuario usuario)
         {
-            if (!ModelState.IsValid)
-            {
-                return View(usuario);
-            }
+            if (!ModelState.IsValid) return View(usuario);
 
             _context.Usuarios.Update(usuario);
             _context.SaveChanges();
-
             return RedirectToAction("Index");
         }
 
-        // ELIMINAR USUARIO
+        // ELIMINAR USUARIO (SOLO ADMIN)
         public IActionResult Delete(int id)
         {
-            var usuario = _context.Usuarios.Find(id);
+            string rolSesion = HttpContext.Session.GetString("Rol");
 
-            if (usuario == null)
+            // Solo el admin puede eliminar
+            if (rolSesion != "administrador")
             {
-                return NotFound();
+                return RedirectToAction("Index");
             }
 
-            _context.Usuarios.Remove(usuario);
-            _context.SaveChanges();
+            var usuario = _context.Usuarios.Find(id);
+            if (usuario != null)
+            {
+                _context.Usuarios.Remove(usuario);
+                _context.SaveChanges();
+            }
 
             return RedirectToAction("Index");
         }

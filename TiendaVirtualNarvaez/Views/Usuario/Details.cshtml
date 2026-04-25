@@ -1,30 +1,48 @@
 ﻿@model TiendaVirtualNarvaez.Models.Usuario
 
-<div class="container mt-4">
-    <div class="card shadow-sm">
-        <div class="card-header bg-primary text-white">
-            <h3 class="mb-0">Perfil de @Model.Nombre</h3>
-        </div>
-        <div class="card-body">
-            <dl class="row">
-                <dt class="col-sm-4">Nombre Completo</dt>
-                <dd class="col-sm-8">@Model.Nombre</dd>
+@* Añadimos el margen inferior mb-5 pb-5 para proteger los botones del footer *@
+<div class="container mt-4 mb-5 pb-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white text-center">
+                    <h3 class="mb-0">Perfil de @Model.Nombre</h3>
+                </div>
+                <div class="card-body p-4">
+                    <dl class="row">
+                        <dt class="col-sm-5 font-weight-bold">Nombre Completo</dt>
+                        <dd class="col-sm-7 text-muted">@Model.Nombre</dd>
 
-                <dt class="col-sm-4">Correo Electrónico</dt>
-                <dd class="col-sm-8">@Model.Correo</dd>
+                        <hr class="text-light">
 
-                <dt class="col-sm-4">Celular</dt>
-                <dd class="col-sm-8">@Model.Celular</dd>
+                        <dt class="col-sm-5 font-weight-bold">Correo Electrónico</dt>
+                        <dd class="col-sm-7 text-muted">@Model.Correo</dd>
 
-                <dt class="col-sm-4">Rol en el sistema</dt>
-                <dd class="col-sm-8">
-                    <span class="badge bg-info text-dark">@Model.Rol</span>
-                </dd>
-            </dl>
-        </div>
-        <div class="card-footer">
-            <a href="/Usuario/Edit/@Model.Id" class="btn btn-warning">Editar</a>
-            <a href="/Usuario" class="btn btn-secondary">Volver</a>
+                        <hr class="text-light">
+
+                        <dt class="col-sm-5 font-weight-bold">Celular</dt>
+                        <dd class="col-sm-7 text-muted">@Model.Celular</dd>
+
+                        <hr class="text-light">
+
+                        <dt class="col-sm-5 font-weight-bold">Clave</dt>
+                        <dd class="col-sm-7 text-muted">********</dd> @* Ocultamos la clave por seguridad visual *@
+
+                        <hr class="text-light">
+
+                        <dt class="col-sm-5 font-weight-bold">Rol en el sistema</dt>
+                        <dd class="col-sm-7">
+                            <span class="badge bg-info text-dark p-2">@Model.Rol</span>
+                        </dd>
+                    </dl>
+                </div>
+                <div class="card-footer d-flex gap-2">
+                    <a href="/Usuario/Edit/@Model.Id" class="btn btn-warning px-4">Editar</a>
+                    <a href="/Usuario" class="btn btn-secondary px-4">Volver</a>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>

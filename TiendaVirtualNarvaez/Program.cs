@@ -11,6 +11,21 @@ builder.Services.AddDbContext<TiendaContext>(options =>
 // Agregar los servicios MVC (Controladores y Vistas)
 builder.Services.AddControllersWithViews();
 
+// ... código anterior ...
+
+builder.Services.AddControllersWithViews();
+
+// AÑADE ESTA LÍNEA AQUÍ:
+builder.Services.AddHttpContextAccessor();
+
+// También asegúrate de tener configurada la sesión si no lo habías hecho:
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
 var app = builder.Build();
 
 // Configurar el pipeline de solicitud HTTP

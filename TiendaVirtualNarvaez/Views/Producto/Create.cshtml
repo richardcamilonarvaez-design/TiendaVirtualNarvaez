@@ -1,43 +1,56 @@
 ﻿@model TiendaVirtualNarvaez.Models.Producto
 
-<div class="container mt-4">
-    <h2>Crear Producto</h2>
+<div class="container mt-4 mb-5 pb-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            
+            <div class="card shadow-sm p-4">
+                <h2 class="mb-4 text-center">Crear Producto</h2>
 
-    <form asp-action="Create" method="post">
+                <form asp-action="Create" method="post">
 
-        <div asp-validation-summary="All" class="text-danger"></div>
+                    <div asp-validation-summary="All" class="text-danger"></div>
 
-        <div class="mb-3">
-            <label class="form-label">Nombre</label>
-            <input asp-for="Nombre" class="form-control" />
-            <span asp-validation-for="Nombre" class="text-danger"></span>
+                    <div class="mb-3">
+                        <label class="form-label font-weight-bold">Nombre</label>
+                        <input asp-for="Nombre" class="form-control" placeholder="Nombre del producto" />
+                        <span asp-validation-for="Nombre" class="text-danger"></span>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label font-weight-bold">Precio</label>
+                            <div class="input-group">
+                                <span class="input-group-text">$</span>
+                                <input asp-for="Precio" class="form-control" placeholder="0.00" />
+                            </div>
+                            <span asp-validation-for="Precio" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label font-weight-bold">Stock</label>
+                            <input asp-for="Stock" class="form-control" placeholder="Cantidad" />
+                            <span asp-validation-for="Stock" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label font-weight-bold">Categoría</label>
+                        <select asp-for="CategoriaId" asp-items="ViewBag.Categorias" class="form-select">
+                            <option value="">-- Seleccione una categoría --</option>
+                        </select>
+                        <span asp-validation-for="CategoriaId" class="text-danger"></span>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-success px-4">Guardar</button>
+                        <a href="/Producto" class="btn btn-secondary px-4">Volver</a>
+                    </div>
+                </form>
+            </div>
+
         </div>
-
-        <div class="mb-3">
-            <label class="form-label">Precio</label>
-            <input asp-for="Precio" class="form-control" />
-            <span asp-validation-for="Precio" class="text-danger"></span>
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label">Stock</label>
-            <input asp-for="Stock" class="form-control" />
-            <span asp-validation-for="Stock" class="text-danger"></span>
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label">Categoría</label>
-
-            <select asp-for="CategoriaId" asp-items="ViewBag.Categorias" class="form-control">
-                <option value="">Seleccione una categoría</option>
-            </select>
-
-            <span asp-validation-for="CategoriaId" class="text-danger"></span>
-        </div>
-
-        <hr>
-
-        <button type="submit" class="btn btn-success">Guardar</button>
-        <a href="/Producto" class="btn btn-secondary">Volver</a>
-    </form>
+    </div>
 </div>
