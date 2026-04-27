@@ -2,6 +2,7 @@
 using TiendaVirtualNarvaez.Data;
 using TiendaVirtualNarvaez.Models;
 using System.Linq;
+using TiendaVirtualNarvaez.Helpers;
 
 namespace TiendaVirtualJojoa.Controllers
 {
@@ -18,9 +19,11 @@ namespace TiendaVirtualJojoa.Controllers
         }
         [HttpPost]
         public IActionResult Index(string correo, string clave)
-        {
+        {   
+            string claveHash = HashHelper.ObtenerHash(clave);
+
             var usuario = _context.Usuarios
-                .FirstOrDefault(u => u.Correo == correo && u.Clave == clave);
+                .FirstOrDefault(u => u.Correo == correo && u.Clave == claveHash);
 
             if (usuario != null)
             {

@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TiendaVirtualNarvaez.Data;
 using TiendaVirtualNarvaez.Models;
-using Microsoft.EntityFrameworkCore; // Añadido para ToListAsync
+using Microsoft.EntityFrameworkCore;
+using TiendaVirtualNarvaez.Helpers;
 
 namespace TiendaVirtualNarvaez.Controllers
 {
@@ -75,7 +76,9 @@ namespace TiendaVirtualNarvaez.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(Usuario usuario)
-        {
+        {   //Convertir contraña a hash 
+            usuario.Clave = HashHelper.ObtenerHash(usuario.Clave);
+
             if (!ModelState.IsValid) return View(usuario);
             _context.Usuarios.Add(usuario);
             _context.SaveChanges();

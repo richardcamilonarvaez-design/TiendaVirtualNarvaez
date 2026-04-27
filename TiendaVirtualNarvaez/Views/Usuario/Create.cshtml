@@ -25,7 +25,12 @@
 
                     <div class="mb-3">
                         <label class="form-label font-weight-bold">Rol</label>
-                        <input asp-for="Rol" class="form-control" placeholder="Ej: administrador, cliente" />
+                        <select asp-for="Rol" class="form-select">
+                            <option value="">-- Seleccione un rol --</option>
+                            <option value="cliente">Cliente</option>
+                            <option value="administrador">Administrador</option>
+                        </select>
+                        <span asp-validation-for="Rol" class="text-danger"></span>
                     </div>
 
                     <div class="mb-3">
