@@ -19,7 +19,18 @@ namespace TiendaVirtualJojoa.Controllers
         }
         [HttpPost]
         public IActionResult Index(string correo, string clave)
-        {   
+        {
+            if (string.IsNullOrEmpty(correo))
+            {
+                ViewBag.Error = "El correo electrónico es obligatorio";
+                return View();  // Retorna la vista actual con el error
+            }
+
+            if (string.IsNullOrEmpty(clave))
+            {
+                ViewBag.Error = "La contraseña es obligatoria";
+                return View();  // Retorna la vista actual con el error
+            }
             string claveHash = HashHelper.ObtenerHash(clave);
 
             var usuario = _context.Usuarios
@@ -29,7 +40,6 @@ namespace TiendaVirtualJojoa.Controllers
             {
                 // CAMBIO CRÍTICO: Guarda el Correo, no el Nombre, en la sesión "Usuario"
                 HttpContext.Session.SetString("Usuario", usuario.Correo);
-
                 HttpContext.Session.SetString("NombreUsuario", usuario.Nombre); // Opcional: para mostrar el nombre en el Layout
                 HttpContext.Session.SetString("Rol", usuario.Rol);
 

@@ -24,7 +24,8 @@ namespace TiendaVirtualNarvaez.Models
             ErrorMessage = "El celular debe estar entre 3000000000 y 3999999999")]
         public string Celular { get; set; }
 
-        [Required(ErrorMessage = "La clave es obligatoria")]
+        [Required(ErrorMessage = "La clave es obligatoria.")]
+        [StringLength(100, MinimumLength = 4, ErrorMessage = "La clave debe tener al menos 4 caracteres.")]
         public string Clave { get; set; }
     }
 }

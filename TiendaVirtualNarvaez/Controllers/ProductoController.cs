@@ -58,7 +58,7 @@ namespace TiendaVirtualNarvaez.Controllers
         // FORMULARIO CREAR
         public IActionResult Create()
         {
-            ViewBag.Categorias = ObtenerListaConIds(); // 🔥 CORREGIDO
+            ViewBag.Categorias = ObtenerListaConIds(); 
             return View();
         }
 
@@ -76,7 +76,7 @@ namespace TiendaVirtualNarvaez.Controllers
 
             if (!ModelState.IsValid)
             {
-                ViewBag.Categorias = ObtenerListaConIds(); // 🔥 IMPORTANTE
+                ViewBag.Categorias = ObtenerListaConIds(); 
                 return View(producto);
             }
 

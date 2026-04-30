@@ -76,13 +76,24 @@ namespace TiendaVirtualNarvaez.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(Usuario usuario)
-        {   //Convertir contraña a hash 
-            usuario.Clave = HashHelper.ObtenerHash(usuario.Clave);
+        {
+            
+            // Paso 2: Verificar la validez del modelo
+            if (ModelState.IsValid)
+            {
+                // Paso 3: Hashear la contraseña antes de almacenarla
+                usuario.Clave = HashHelper.ObtenerHash(usuario.Clave);
 
-            if (!ModelState.IsValid) return View(usuario);
-            _context.Usuarios.Add(usuario);
-            _context.SaveChanges();
-            return RedirectToAction("Index");
+                // Paso 4: Agregar el usuario a la base de datos
+                _context.Usuarios.Add(usuario);
+                _context.SaveChanges();
+
+                // Paso 5: Redirigir a la página principal o a donde necesites
+                return RedirectToAction("Index");
+            }
+
+            // Paso 6: Si el modelo no es válido, retornar la vista con los errores
+            return View(usuario);
         }
 
         // FORMULARIO EDITAR (CON PROTECCIÓN)
@@ -107,11 +118,14 @@ namespace TiendaVirtualNarvaez.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(Usuario usuario)
         {
-            if (!ModelState.IsValid) return View(usuario);
-
-            _context.Usuarios.Update(usuario);
-            _context.SaveChanges();
-            return RedirectToAction("Index");
+            if (ModelState.IsValid)
+            {
+                usuario.Clave = HashHelper.ObtenerHash(usuario.Clave);
+                _context.Usuarios.Update(usuario);
+                _context.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View(usuario);
         }
 
         // ELIMINAR USUARIO (SOLO ADMIN)
