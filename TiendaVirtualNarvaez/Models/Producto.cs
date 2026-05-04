@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TiendaVirtualNarvaez.Models
 {
@@ -29,6 +30,15 @@ namespace TiendaVirtualNarvaez.Models
         [ValidateNever]
         public Categoria Categoria { get; set; }
 
+        // Propiedad opcional para la URL de la imagen
+        [ValidateNever]
+        public string? ImagenUrl { get; set; }  
+
+        // Propiedad para recibir el archivo de imagen (no mapeada a BD)
+        [NotMapped]
+        [ValidateNever]
+        public IFormFile? imagen { get; set; }
+
         public double CalcularValorInventario()
         {
             return Precio * Stock;
@@ -38,6 +48,7 @@ namespace TiendaVirtualNarvaez.Models
         {
             return Stock > 0;
         }
+
     }
 }
 

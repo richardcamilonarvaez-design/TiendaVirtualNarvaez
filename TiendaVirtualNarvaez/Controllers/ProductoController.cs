@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TiendaVirtualNarvaez.Data;
 using TiendaVirtualNarvaez.Models;
-using Microsoft.AspNetCore.Mvc.Rendering;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace TiendaVirtualNarvaez.Controllers
 {
@@ -64,7 +65,7 @@ namespace TiendaVirtualNarvaez.Controllers
 
         // GUARDAR PRODUCTO
         [HttpPost]
-        public IActionResult Create(Producto producto)
+        public IActionResult Create(Producto producto, IFormFile imagen)
         {
             var existeCategoria = _context.Categorias
                 .Any(c => c.Id == producto.CategoriaId);
@@ -78,6 +79,20 @@ namespace TiendaVirtualNarvaez.Controllers
             {
                 ViewBag.Categorias = ObtenerListaConIds(); 
                 return View(producto);
+            }
+
+            if (imagen != null)
+            {
+                var ruta = Path.Combine(Directory.GetCurrentDirectory(),
+                                         "wwwroot/images",
+                                         imagen.FileName);
+
+                using (var stream = new FileStream(ruta, FileMode.Create))
+                {
+                    imagen.CopyTo(stream);
+                }
+
+                producto.ImagenUrl = "/images/" + imagen.FileName;
             }
 
             _context.Productos.Add(producto);
@@ -96,16 +111,20 @@ namespace TiendaVirtualNarvaez.Controllers
         }
 
         // FORMULARIO EDITAR
+        // GET: Mostrar formulario de edición
         public IActionResult Edit(int id)
         {
             var producto = _context.Productos.Find(id);
+            if (producto == null)
+                return NotFound();
+
             ViewBag.Categorias = ObtenerListaConIds();
             return View(producto);
         }
 
-        // ACTUALIZAR PRODUCTO
+        // POST: Guardar cambios del producto
         [HttpPost]
-        public IActionResult Edit(Producto producto)
+        public IActionResult Edit(Producto producto, IFormFile? imagen)
         {
             if (!ModelState.IsValid)
             {
@@ -113,17 +132,32 @@ namespace TiendaVirtualNarvaez.Controllers
                 return View(producto);
             }
 
-            _context.Productos.Update(producto);
-            _context.SaveChanges();
+            var productoBD = _context.Productos.Find(producto.Id);
+            if (productoBD == null)
+                return NotFound();
 
-            var categoriaNueva = _context.Categorias.Find(producto.CategoriaId);
+            productoBD.Nombre = producto.Nombre;
+            productoBD.Precio = producto.Precio;
+            productoBD.Stock = producto.Stock;
+            productoBD.CategoriaId = producto.CategoriaId;
 
-            if (categoriaNueva != null)
+            if (imagen != null)
             {
-                categoriaNueva.Estado = "Activo";
-                _context.Categorias.Update(categoriaNueva);
-                _context.SaveChanges();
+                var carpeta = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images");
+                if (!Directory.Exists(carpeta))
+                    Directory.CreateDirectory(carpeta);
+
+                var ruta = Path.Combine(carpeta, imagen.FileName);
+                using (var stream = new FileStream(ruta, FileMode.Create))
+                {
+                    imagen.CopyTo(stream);
+                }
+
+                productoBD.ImagenUrl = "/images/" + imagen.FileName;
             }
+
+            _context.Productos.Update(productoBD);
+            _context.SaveChanges();
 
             return RedirectToAction("Index");
         }

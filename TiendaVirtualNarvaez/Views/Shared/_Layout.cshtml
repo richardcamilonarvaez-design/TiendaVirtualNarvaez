@@ -14,9 +14,7 @@
 
 <body>
     @{
-        // Detectamos en qué controlador estamos
         var controllerActual = ViewContext.RouteData.Values["Controller"]?.ToString();
-        // Si el controlador es "Login", esta variable será verdadera
         bool esLogin = (controllerActual == "Login");
     }
 
@@ -34,7 +32,6 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
 
-                        @* SOLO se muestran si NO estamos en el Login *@
                         @if (!esLogin)
                         {
                             <li class="nav-item">
@@ -55,7 +52,6 @@
                         </li>
                     </ul>
 
-                    @* El botón de Cerrar sesión SOLO se muestra si NO estamos en el Login *@
                     @if (!esLogin)
                     {
                         <a class="btn btn-danger ms-auto" href="/Login/Logout" style="color: white;">Cerrar sesión</a>
