@@ -10,19 +10,21 @@ namespace TiendaVirtualNarvaez.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AlterColumn<string>(
+            // CAMBIA AlterColumn por AddColumn para la Clave
+            migrationBuilder.AddColumn<string>(
                 name: "Clave",
                 table: "Usuarios",
                 type: "nvarchar(100)",
+                maxLength: 100,
                 nullable: false,
                 defaultValue: "");
 
+            // Asegúrate de que la ImagenUrl también sea AddColumn
             migrationBuilder.AddColumn<string>(
                 name: "ImagenUrl",
                 table: "Productos",
                 type: "nvarchar(max)",
-                nullable: false,
-                defaultValue: "");
+                nullable: true); // La ponemos como opcional para evitar errores con datos existentes
         }
 
         /// <inheritdoc />
