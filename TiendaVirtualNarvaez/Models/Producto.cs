@@ -32,11 +32,11 @@ namespace TiendaVirtualNarvaez.Models
 
         // Propiedad opcional para la URL de la imagen
         [ValidateNever]
-        public string? ImagenUrl { get; set; }  
+        public string? ImagenUrl { get; set; }
 
         // Propiedad para recibir el archivo de imagen (no mapeada a BD)
         [NotMapped]
-        [ValidateNever]
+        [Required(ErrorMessage = "La imagen es obligatoria")]
         public IFormFile? imagen { get; set; }
 
         public double CalcularValorInventario()
