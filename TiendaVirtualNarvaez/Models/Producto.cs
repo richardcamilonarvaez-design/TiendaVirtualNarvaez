@@ -34,11 +34,6 @@ namespace TiendaVirtualNarvaez.Models
         [ValidateNever]
         public string? ImagenUrl { get; set; }
 
-        // Propiedad para recibir el archivo de imagen (no mapeada a BD)
-        [NotMapped]
-        [Required(ErrorMessage = "La imagen es obligatoria")]
-        public IFormFile? imagen { get; set; }
-
         public double CalcularValorInventario()
         {
             return Precio * Stock;

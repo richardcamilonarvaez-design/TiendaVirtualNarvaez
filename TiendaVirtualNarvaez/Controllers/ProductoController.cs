@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 using TiendaVirtualNarvaez.Data;
 using TiendaVirtualNarvaez.Models;
 using static System.Net.Mime.MediaTypeNames;
+using System.Text.Json;
 
 namespace TiendaVirtualNarvaez.Controllers
 {
@@ -40,6 +42,98 @@ namespace TiendaVirtualNarvaez.Controllers
             return View(productos);
         }
 
+        public IActionResult AgregarCarrito(int id, int cantidad)
+        {
+            var carritoJson = HttpContext.Session.GetString("Carrito");
+
+            List<CarritoItem> carrito;
+
+            if (carritoJson == null)
+            {
+                carrito = new List<CarritoItem>();
+            }
+            else
+            {
+                carrito = JsonSerializer.Deserialize<List<CarritoItem>>(carritoJson);
+            }
+
+            var item = carrito.FirstOrDefault(p => p.ProductoId == id);
+
+            if (item != null)
+            {
+                item.Cantidad += cantidad;
+            }
+            else
+            {
+                carrito.Add(new CarritoItem
+                {
+                    ProductoId = id,
+                    Cantidad = cantidad
+                });
+            }
+
+            HttpContext.Session.SetString(
+                "Carrito",
+                JsonSerializer.Serialize(carrito)
+            );
+
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult Carrito()
+        {
+            var carritoJson = HttpContext.Session.GetString("Carrito");
+            List<CarritoItem> carrito;
+
+            if (carritoJson == null)
+                carrito = new List<CarritoItem>();
+            else
+                carrito = JsonSerializer.Deserialize<List<CarritoItem>>(carritoJson);
+
+            var productos = new List<(Producto producto, int cantidad)>();
+
+            foreach (var item in carrito)
+            {
+                var producto = _context.Productos.Find(item.ProductoId);
+
+                if (producto != null)
+                {
+                    productos.Add((producto, item.Cantidad));
+                }
+            }
+
+            return View(productos);
+        }
+
+        public IActionResult Comprar()
+        {
+            var carritoJson = HttpContext.Session.GetString("Carrito");
+
+            if (carritoJson == null)
+                return RedirectToAction("Index");
+
+            var carrito = JsonSerializer.Deserialize<List<CarritoItem>>(carritoJson);
+
+            foreach (var item in carrito)
+            {
+                var producto = _context.Productos.Find(item.ProductoId);
+
+                if (producto != null)
+                {
+                    if (producto.Stock >= item.Cantidad)
+                    {
+                        producto.Stock -= item.Cantidad;
+                    }
+                }
+            }
+
+            _context.SaveChanges();
+
+            HttpContext.Session.Remove("Carrito");
+
+            return RedirectToAction("Index");
+        }
+
         // DETALLES DEL PRODUCTO
         public IActionResult Details(int id)
         {
@@ -65,7 +159,7 @@ namespace TiendaVirtualNarvaez.Controllers
 
         // GUARDAR PRODUCTO
         [HttpPost]
-        public IActionResult Create(Producto producto, IFormFile imagen)
+        public IActionResult Create(Producto producto, IFormFile? imagen)
         {
             var existeCategoria = _context.Categorias
                 .Any(c => c.Id == producto.CategoriaId);
@@ -93,6 +187,11 @@ namespace TiendaVirtualNarvaez.Controllers
                 }
 
                 producto.ImagenUrl = "/images/" + imagen.FileName;
+            }
+
+            if (string.IsNullOrEmpty(producto.ImagenUrl))
+            {
+                producto.ImagenUrl = "/images/default.jpg";
             }
 
             _context.Productos.Add(producto);
