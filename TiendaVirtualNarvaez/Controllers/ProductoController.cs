@@ -42,10 +42,24 @@ namespace TiendaVirtualNarvaez.Controllers
             return View(productos);
         }
 
+        [HttpPost]
         public IActionResult AgregarCarrito(int id, int cantidad)
         {
-            var carritoJson = HttpContext.Session.GetString("Carrito");
+            var producto = _context.Productos.Find(id);
+            
+            if (producto == null || producto.Stock == 0)
+            {
+                TempData["Error"] = "Producto sin existencias";
+                return RedirectToAction("Index");
+            }
 
+            if (cantidad > producto.Stock)
+            {
+                TempData["Error"] = "No hay disponibles tantas unidades";
+                return RedirectToAction("Index");
+            }
+
+            var carritoJson = HttpContext.Session.GetString("Carrito");
             List<CarritoItem> carrito;
 
             if (carritoJson == null)
@@ -54,13 +68,20 @@ namespace TiendaVirtualNarvaez.Controllers
             }
             else
             {
-                carrito = JsonSerializer.Deserialize<List<CarritoItem>>(carritoJson);
+                carrito = System.Text.Json.JsonSerializer
+                    .Deserialize<List<CarritoItem>>(carritoJson);
             }
 
             var item = carrito.FirstOrDefault(p => p.ProductoId == id);
 
             if (item != null)
             {
+                if ((item.Cantidad + cantidad) > producto.Stock)
+                {
+                    TempData["Error"] = "No hay suficientes unidades disponibles";
+                    return RedirectToAction("Index");
+                }
+
                 item.Cantidad += cantidad;
             }
             else
@@ -74,8 +95,10 @@ namespace TiendaVirtualNarvaez.Controllers
 
             HttpContext.Session.SetString(
                 "Carrito",
-                JsonSerializer.Serialize(carrito)
+                System.Text.Json.JsonSerializer.Serialize(carrito)
             );
+
+            TempData["Mensaje"] = "Producto agregado al carrito";
 
             return RedirectToAction("Index");
         }
@@ -132,6 +155,15 @@ namespace TiendaVirtualNarvaez.Controllers
             HttpContext.Session.Remove("Carrito");
 
             return RedirectToAction("Index");
+        }
+
+        public IActionResult Eliminar(int productoId)
+        {
+            // Elimina completamente la sesión del carrito
+            HttpContext.Session.Remove("Carrito");
+
+            // Redirige a la página del carrito (o Index)
+            return RedirectToAction("Carrito"); // Cambia "Carrito" según tu acción que muestra la tabla
         }
 
         // DETALLES DEL PRODUCTO

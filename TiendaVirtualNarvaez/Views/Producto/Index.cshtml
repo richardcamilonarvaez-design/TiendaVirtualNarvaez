@@ -6,16 +6,32 @@
 }
 
 <div class="container mt-4 mb-5 pb-5">
+    @if (TempData["Mensaje"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["Mensaje"]
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["Error"]
+        </div>
+    }
+
     <h2 class="mb-4 text-center">Productos</h2>
+
+    <a class="btn btn-primary mb-3" href="/Producto/Carrito">
+        Ver Carrito
+    </a>
 
     @if (rolSesion == "administrador")
     {
         <a class="btn btn-success mb-3 shadow-sm" href="/Producto/Create">
             <i class="bi bi-plus-circle"></i> Nuevo Producto
         </a>
-        <a class="btn btn-primary mb-3" href="/Producto/Carrito">
-            Ver Carrito
-        </a>
+        
     }
 
     <div class="row">
@@ -45,21 +61,37 @@
                         </p>
 
                         <div class="mt-auto">
- 
-                            <a href="/Producto/Details/@item.Id" class="btn btn-info btn-sm text-white mb-1 w-100">Ver</a>
+
                             <hr>
-                            <form asp-action="AgregarCarrito" method="post">
+                            @if (item.Stock > 0)
+                            {
+                                <form asp-action="AgregarCarrito" method="post">
 
-                                <input type="hidden" name="id" value="@item.Id" />
+                                    <input type="hidden" name="id" value="@item.Id" />
 
-                                <input type="number" name="cantidad" value="1" min="1"
-                                       class="form-control mb-2" />
+                                    <input type="number"
+                                           name="cantidad"
+                                           value="1"
+                                           min="1"
+                                           max="@item.Stock"
+                                           class="form-control mb-2" />
 
-                                <button class="btn btn-primary w-100">
-                                    Agregar al carrito
+                                    <button class="btn btn-primary w-100">
+                                        Agregar al carrito
+                                    </button>
+
+                                </form>
+                            }
+                            else
+                            {
+                                <div class="alert alert-warning text-center">
+                                    Producto agotado
+                                </div>
+
+                                <button class="btn btn-secondary w-100" disabled>
+                                    Sin stock
                                 </button>
-
-                            </form>
+                            }
 
                             @if (rolSesion == "administrador")
                             {
